@@ -116,7 +116,7 @@ export async function appRoutes(app: FastifyInstance) {
         (
           SELECT 
             cast(count(*) as float)
-          FROM dayHabits DH
+          FROM day_habits DH
           WHERE DH.day_id = D.id
         ) AS completed,
         (
@@ -125,7 +125,7 @@ export async function appRoutes(app: FastifyInstance) {
           FROM habit_week_days HWD
           JOIN habits H ON H.id = HWD.habit_id
           WHERE
-            HWD.week_day = cast(strftime('%w', D.date/1000.0, 'unixepoch') as int)
+            HWD.week_day = extract('isodow' from D.date)
             AND H.created_at <= D.date
         ) AS amount
       FROM days D
